@@ -8,6 +8,7 @@ SVC1_OBJ = $(subst svc1,$(SVC1_DIR),$(SVC1_SRC:.c=.o))
 
 CFLAGS += -g
 CFLAGS += -Wall -Wextra
+CFLAGS += -static
 
 all: $(SVC1_BIN)
 

@@ -9,7 +9,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec felis a nisi 
 ## II. Dependencies
 *Explicitly declare and isolate dependencies*
 
-Quisque fringilla sem dictum, pellentesque ex sed, consequat tortor. Donec non porttitor nunc. Sed auctor ex quis sagittis pretium. Sed at varius elit. Nunc lacinia hendrerit quam, eu lobortis purus facilisis in. Praesent ac luctus nisl. Fusce placerat, dolor nec sollicitudin dignissim, quam mi malesuada magna, vel ultricies libero neque bibendum libero. Nunc suscipit cursus magna. Aliquam tristique leo vitae urna consequat, vel dignissim erat accumsan. Donec suscipit fringilla leo, at lacinia odio commodo ut. Maecenas mattis, dolor et mattis auctor, diam augue sodales est, ac vehicula risus metus quis mi.
+- [x] To enforce *dependency isolation*, external libraries must be statically linked to the programs of this application.
+- [ ] To enforce *dependency declaration*, external libraries must be declared in a *dependency declaration* manifest.
+
 
 ## III. Config
 *Store config in the environment*
