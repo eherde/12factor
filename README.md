@@ -16,7 +16,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec felis a nisi 
 ## III. Config
 *Store config in the environment*
 
-Praesent in viverra odio, ut dignissim nisl. Pellentesque id purus velit. Duis fringilla tristique tortor, nec euismod neque sollicitudin feugiat. Vivamus vulputate lacinia orci, et facilisis ligula fermentum quis. In hendrerit accumsan augue id rutrum. Vivamus vel interdum lacus, vehicula congue dolor. Proin ut auctor magna, in vehicula est. Vestibulum bibendum auctor ipsum, ac tempor mi auctor eget. Quisque tempus lacinia arcu mollis commodo. Pellentesque posuere magna tellus, mattis cursus est lobortis non. Fusce sagittis eget quam quis iaculis.
+This approach has some immediate drawbacks. Environment variables lack the depth and complexity that other configuration methods such as yaml and json provide.
+The 12 factor documentation does not provide guidance on how to correctly implement this approach. It states:
+> In a twelve-factor app, env vars are granular controls, each fully orthogonal to other env vars.
+The authenticity of this assertion should be explored.
 
 ## IV. Backing Services
 *Treat backing services as attached resources*
