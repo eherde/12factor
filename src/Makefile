@@ -6,6 +6,8 @@ SVC1_BIN = $(SVC1_DIR)/svc1
 SVC1_SRC = $(wildcard svc1/*.c)
 SVC1_OBJ = $(subst svc1,$(SVC1_DIR),$(SVC1_SRC:.c=.o))
 
+CPPFLAGS += -I include
+
 CFLAGS += -g
 CFLAGS += -Wall -Wextra
 CFLAGS += -static

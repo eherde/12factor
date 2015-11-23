@@ -59,7 +59,8 @@ Proin velit elit, mattis non eros non, vestibulum sagittis nisl. Ut quis magna q
 ## XI. Logs
 *Treat logs as event streams*
 
-Praesent euismod sem non vestibulum porta. Fusce nulla eros, aliquam accumsan justo in, pharetra blandit nulla. Quisque eu ullamcorper mauris. Nam accumsan venenatis velit in ornare. Phasellus eleifend at sapien vitae elementum. Integer condimentum, est at posuere faucibus, ante nunc tempus ipsum, eu tempor elit quam quis dui. Proin viverra tincidunt mauris, id finibus libero dignissim ac. Sed efficitur nunc ligula, at finibus dolor imperdiet et. Suspendisse scelerisque libero placerat felis ultricies, et aliquam erat malesuada. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut non massa mattis, ultricies diam tincidunt, vehicula tellus. Aenean eleifend lectus ac condimentum molestie. Donec elementum elementum nulla, quis vestibulum ligula suscipit sed. Morbi tempus, erat quis semper blandit, mi ex bibendum ex, at blandit justo lorem ac felis.
+We use the setvbuf(3) function to change stdout to unbuffered, then start logging some information. This output can now be redirected to a file or external log handling service. One interesting problem here is how log levels interact with 12 factor. We can either set log levels within each service, or we can log everything  and let the consumer of the logs filter down to the level they want. Both options have their merits and should be evaluated.
+
 
 ## XII. Admin processes
 *Run admin/management tasks as one-off processes*
