@@ -1,4 +1,3 @@
-
 HIREDIS_VER = 0.13.3
 HIREDIS_SRC = $(SRC)/hiredis
 HIREDIS_LIB = $(DST)/usr/local/lib/libhiredis.so
