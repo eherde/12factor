@@ -7,7 +7,8 @@
 
 #include <log.h>
 
-extern redisContext *rdconnect(const char *ip, int port);
+extern redisContext *rd_connect(const char *ip, int port);
+void rd_free(redisContext *ctx);
 
 /* global config options */
 unsigned int lint = 0;    /* logging interval */
@@ -17,7 +18,7 @@ char        *user = NULL; /* current user */
 /* redis options */
 char         *rd_ip   = NULL; /* redis ip address */
 int           rd_port = 0;    /* redis port */
-redisContext *rctx    = NULL; /* redis connection context */
+redisContext *rd_ctx    = NULL; /* redis connection context */
 
 int g_signum = 0;
 
@@ -31,8 +32,8 @@ static void cleanup(void)
 	free(home);
 	free(user);
 	home = user = NULL;
-	redisFree(rctx);
-	rctx = NULL;
+	rd_free(rd_ctx);
+	rd_ctx = NULL;
 }
 
 static void configure(void)
@@ -88,7 +89,7 @@ int main(int argc, char *argv[])
 	setvbuf(stdout, NULL, _IONBF, 0);
 	LOG("--- %s (%d) starting ---", argv[0], getpid());
 	configure();
-	rctx = rdconnect(rd_ip, rd_port);
+	rd_ctx = rd_connect(rd_ip, rd_port);
 	while (1) {
 		LOG("%s running ...", argv[0]);
 		alarm(lint);

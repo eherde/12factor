@@ -2,7 +2,7 @@
 
 #include <log.h>
 
-redisContext *rdconnect(const char *ip, int port)
+redisContext *rd_connect(const char *ip, int port)
 {
 	redisContext *ctx = NULL;
 	if (!ip)
@@ -15,4 +15,11 @@ redisContext *rdconnect(const char *ip, int port)
 	}
 out:
 	return ctx;
+}
+
+void rd_free(redisContext *ctx)
+{
+	if (!ctx)
+		return;
+	redisFree(ctx);
 }
