@@ -1,3 +1,4 @@
+#include <hiredis/hiredis.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,10 +7,17 @@
 
 #include <log.h>
 
+extern redisContext *rdconnect(const char *ip, int port);
+
 /* global config options */
 unsigned int lint = 0;    /* logging interval */
 char        *home = NULL; /* home directory */
 char        *user = NULL; /* current user */
+
+/* redis options */
+char         *rd_ip   = NULL; /* redis ip address */
+int           rd_port = 0;    /* redis port */
+redisContext *rctx    = NULL; /* redis connection context */
 
 int g_signum = 0;
 
@@ -23,6 +31,8 @@ static void cleanup(void)
 	free(home);
 	free(user);
 	home = user = NULL;
+	redisFree(rctx);
+	rctx = NULL;
 }
 
 static void configure(void)
@@ -44,6 +54,22 @@ static void configure(void)
 	} else {
 		lint = 1;
 	}
+
+	/* redis IP */
+	key = getenv("_12RDIP");
+	if (key) {
+		rd_ip = strdup(key);
+	} else {
+		rd_ip = strdup("127.0.0.1");
+	}
+
+	/* redis port */
+	key = getenv("_12RDPORT");
+	if (key) {
+		rd_port = atoi(key);
+	} else {
+		rd_port = 6379;
+	}
 }
 
 int main(int argc, char *argv[])
@@ -60,9 +86,9 @@ int main(int argc, char *argv[])
 	/* From 12 factor:
 	   "each running process writes its event stream, unbuffered, to stdout" */
 	setvbuf(stdout, NULL, _IONBF, 0);
-
 	LOG("--- %s (%d) starting ---", argv[0], getpid());
 	configure();
+	rctx = rdconnect(rd_ip, rd_port);
 	while (1) {
 		LOG("%s running ...", argv[0]);
 		alarm(lint);

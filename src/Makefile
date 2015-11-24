@@ -10,7 +10,9 @@ CPPFLAGS += -I include
 
 CFLAGS += -g
 CFLAGS += -Wall -Wextra
-CFLAGS += -static
+#CFLAGS += -static
+
+LDFLAGS += -lhiredis
 
 all: $(SVC1_BIN)
 
