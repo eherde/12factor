@@ -9,9 +9,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec felis a nisi 
 ## II. Dependencies
 *Explicitly declare and isolate dependencies*
 
-- [x] To enforce *dependency isolation*, external libraries must be statically linked to the programs of this application.
+- [ ] To enforce *dependency isolation*, external libraries must be statically linked to the programs of this application.
 - [ ] To enforce *dependency declaration*, external libraries must be declared in a *dependency declaration* manifest.
 
+The inclusion of the external dependency hiredis causes a few complications. Although 12 factor suggests that libraries should be statically linked, the following error occurs when linking to libhiredis.a:
+> warning: Using 'getaddrinfo' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
+Some investigation indicates that libnss, which is used by glibc, cannot be statically linked. The reason behind this is unclear. The article [Static Linking Considered Harmful](http://www.akkadia.org/drepper/no_static_linking.html) has some strong opinions on the matter.
 
 ## III. Config
 *Store config in the environment*

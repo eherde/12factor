@@ -10,7 +10,6 @@ CPPFLAGS += -I include
 
 CFLAGS += -g
 CFLAGS += -Wall -Wextra
-#CFLAGS += -static
 
 LDFLAGS += -lhiredis
 
