@@ -1,0 +1,16 @@
+Installing the 12 Factor App
+****************************
+
+This project uses CMake. Configure the project my changing
+directory to new directory to be used as your build directory.
+Run `cmake <dir' where <dir> is the path to src. You may then
+run your make commands from the build directory.
+
+Run `make' to build the project.
+
+Run `make install' to install to your system directories (e.g.
+/usr/local, et al.). Use DESTDIR=<path> to change the root of the
+installation. For example `make DESTDIR=$HOME install' will use
+$HOME as the root directory instead of /.
+
+Run `make clean` to clean the project.

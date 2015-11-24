@@ -38,10 +38,8 @@ _12RDPORT=6379    # redis port
 ## V. Build, release, run
 *Strictly separate build and run stages*
 
-The app has three separate stages:
-* Build:   ```make```
-* Release: ```DESTDIR=<path> PREFIX=<path> make install```
-* Run:     ```$DESTDIR$PREFIX/bin/svc1```
+The build and release process is described in the INSTALL file.
+Once the app is installed it is run by invoking ```svc1```
 
 ## VI. Processes
 *Execute the app as one or more stateless processes*
