@@ -14,6 +14,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec felis a nisi 
 
 The inclusion of the external dependency hiredis causes a few complications. Although 12 factor suggests that libraries should be statically linked, the following error occurs when linking to libhiredis.a:
 > warning: Using 'getaddrinfo' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
+
 Some investigation indicates that libnss, which is used by glibc, cannot be statically linked. The reason behind this is unclear. The article [Static Linking Considered Harmful](http://www.akkadia.org/drepper/no_static_linking.html) has some strong opinions on the matter.
 
 ## III. Config
@@ -22,12 +23,17 @@ Some investigation indicates that libnss, which is used by glibc, cannot be stat
 This approach has some immediate drawbacks. Environment variables lack the depth and complexity that other configuration methods such as yaml and json provide.
 The 12 factor documentation does not provide guidance on how to correctly implement this approach. It states:
 > In a twelve-factor app, env vars are granular controls, each fully orthogonal to other env vars.
+
 The authenticity of this assertion should be explored.
 
 ## IV. Backing Services
 *Treat backing services as attached resources*
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus et tempus neque. Curabitur ultrices justo pulvinar, molestie magna non, rhoncus ex. Quisque pellentesque molestie mi condimentum sollicitudin. Proin convallis enim ac cursus fringilla. Proin congue tellus urna, eu malesuada ligula maximus ac. Nunc vitae dictum metus. Donec malesuada, nibh in vulputate tristique, justo ante fringilla dolor, id rutrum metus est eu enim.
+The redis backing service uses the below environment variables:
+```
+_12RDIP=127.0.0.1 # redis ip address
+_12RDPORT=6379    # redis port
+```
 
 ## V. Build, release, run
 *Strictly separate build and run stages*
