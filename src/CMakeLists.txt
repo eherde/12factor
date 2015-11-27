@@ -11,10 +11,10 @@ set(CMAKE_C_FLAGS "-Wall -Wextra -g")
 # libcore
 add_library(core STATIC libcore/time.c)
 
-# svc1
-add_executable(svc1 svc1/main.c svc1/redis.c)
-target_link_libraries (svc1 hiredis)
-target_link_libraries(svc1 core)
+# rd
+add_executable(rd rd/main.c rd/redis.c)
+target_link_libraries(rd hiredis)
+target_link_libraries(rd core)
 
 # install
-install(TARGETS svc1 DESTINATION bin)
+install(TARGETS rd DESTINATION bin)
