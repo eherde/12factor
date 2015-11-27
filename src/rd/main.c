@@ -7,8 +7,12 @@
 
 #include <log.h>
 
+extern int  simple_signum(void);
+extern void simple_handler(int);
+extern void simple_signal(int, void(*)(int));
+
 extern redisContext *rd_connect(const char *ip, int port);
-void rd_free(redisContext *ctx);
+extern void rd_free(redisContext *ctx);
 
 /* global config options */
 unsigned int lint = 0;    /* logging interval */
@@ -19,13 +23,6 @@ char        *user = NULL; /* current user */
 char         *rd_ip   = NULL; /* redis ip address */
 int           rd_port = 0;    /* redis port */
 redisContext *rd_ctx    = NULL; /* redis connection context */
-
-int g_signum = 0;
-
-static void handler(int signum)
-{
-	g_signum = signum;
-}
 
 static void cleanup(void)
 {
@@ -76,13 +73,10 @@ static void configure(void)
 int main(int argc, char *argv[])
 {
 	argc = argc;
-	struct sigaction sigact;
-	sigact.sa_handler = handler;
-	sigemptyset(&sigact.sa_mask);
-	sigact.sa_flags = 0;
-	sigaction(SIGINT, &sigact, NULL);
-	sigaction(SIGTERM, &sigact, NULL);
-	sigaction(SIGALRM, &sigact, NULL);
+	simple_signal(SIGINT,  simple_handler);
+	simple_signal(SIGTERM, simple_handler);
+	simple_signal(SIGALRM, simple_handler);
+	int signum = 0;
 
 	/* From 12 factor:
 	   "each running process writes its event stream, unbuffered, to stdout" */
@@ -94,10 +88,11 @@ int main(int argc, char *argv[])
 		LOG("%s running ...", argv[0]);
 		alarm(lint);
 		pause();
-		if (g_signum && g_signum != SIGALRM)
+		signum = simple_signum();
+		if (signum && signum != SIGALRM)
 			break;
 	}
 	LOG("--- %s (%d) stopping ---", argv[0], getpid());
 	cleanup();
-	return 128 + g_signum;
+	return 128 + signum;
 }
