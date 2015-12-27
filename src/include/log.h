@@ -1,5 +1,6 @@
 #ifndef _12LOG_
 #define _12LOG_
+#include <stdio.h>
 extern int utcstr(char *buf, size_t len);
 char timestr[64];
 #define LOG(_fmt, ...) do {                                 \

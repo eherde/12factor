@@ -7,6 +7,8 @@
 
 #include <log.h>
 
+extern int load_env(const char *[], char *[], const char *[]);
+
 extern int  simple_signum(void);
 extern void simple_handler(int);
 extern void simple_signal(int, void(*)(int));
@@ -15,59 +17,48 @@ extern redisContext *rd_connect(const char *ip, int port);
 extern void rd_free(redisContext *ctx);
 
 /* global config options */
-unsigned int lint = 0;    /* logging interval */
-char        *home = NULL; /* home directory */
-char        *user = NULL; /* current user */
+char lint[64]; /* logging interval */
+char home[64]; /* home directory */
+char user[64]; /* current user */
 
 /* redis options */
-char         *rd_ip   = NULL; /* redis ip address */
-int           rd_port = 0;    /* redis port */
-redisContext *rd_ctx    = NULL; /* redis connection context */
+char          rd_ip[64];     /* redis ip address */
+char          rd_port[64];   /* redis port */
+redisContext *rd_ctx = NULL; /* redis connection context */
 
 static void cleanup(void)
 {
-	free(home);
-	free(user);
-	home = user = NULL;
 	rd_free(rd_ctx);
 	rd_ctx = NULL;
 }
 
 static void configure(void)
 {
-	char *key = NULL;
-
-	key = getenv("HOME");
-	if (key)
-		home = strdup(key);
-
-	key = getenv("USER");
-	if (key)
-		user = strdup(key);
-
-	/* logging interval */
-	key = getenv("_12LINT");
-	if (key) {
-		lint = atoi(key);
-	} else {
-		lint = 1;
-	}
-
-	/* redis IP */
-	key = getenv("_12RDIP");
-	if (key) {
-		rd_ip = strdup(key);
-	} else {
-		rd_ip = strdup("127.0.0.1");
-	}
-
-	/* redis port */
-	key = getenv("_12RDPORT");
-	if (key) {
-		rd_port = atoi(key);
-	} else {
-		rd_port = 6379;
-	}
+	const char *keys[] = {
+		"HOME",
+		"USER",
+		"_12LINT",
+		"_12RDIP",
+		"_12RDPORT",
+		NULL
+	};
+	char *vals[] = {
+		home,
+		user,
+		lint,
+		rd_ip,
+		rd_port,
+		NULL
+	};
+	const char *defaults[] = {
+		NULL,
+		NULL,
+		"1",
+		"localhost",
+		"6379",
+		NULL
+	};
+	load_env(keys, vals, defaults);
 }
 
 int main(int argc, char *argv[])
@@ -77,16 +68,24 @@ int main(int argc, char *argv[])
 	simple_signal(SIGTERM, simple_handler);
 	simple_signal(SIGALRM, simple_handler);
 	int signum = 0;
+	int interval = 0;
+	int port = 0;
 
 	/* From 12 factor:
 	   "each running process writes its event stream, unbuffered, to stdout" */
 	setvbuf(stdout, NULL, _IONBF, 0);
 	LOG("--- %s (%d) starting ---", argv[0], getpid());
 	configure();
-	rd_ctx = rd_connect(rd_ip, rd_port);
+	if (lint[0] != '\0') {
+		interval = atoi(lint);
+	}
+	if (rd_port[0] != '\0') {
+		port = atoi(rd_port);
+	}
+	rd_ctx = rd_connect(rd_ip, port);
 	while (1) {
 		LOG("%s running ...", argv[0]);
-		alarm(lint);
+		alarm(interval);
 		pause();
 		signum = simple_signum();
 		if (signum && signum != SIGALRM)

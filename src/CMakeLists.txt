@@ -9,7 +9,7 @@ include_directories(include)
 set(CMAKE_C_FLAGS "-Wall -Wextra -g")
 
 # libcore
-add_library(core STATIC libcore/signal.c libcore/time.c)
+add_library(core STATIC ../ext/bsd/strlcpy.c libcore/env.c libcore/signal.c libcore/time.c)
 
 # rd
 add_executable(rd rd/main.c rd/redis.c)
